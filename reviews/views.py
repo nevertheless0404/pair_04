@@ -2,10 +2,10 @@ from multiprocessing import context
 from django.contrib import messages
 from django.shortcuts import render, redirect, get_object_or_404
 from django.db.models import Q
-from requests import get
 from reviews.forms import ReviewForm, CommentForm
 from .models import Review, Comment
 from django.core.paginator import Paginator
+from django.contrib.auth.decorators import login_required
 
 # Create your views here.
 
@@ -23,6 +23,7 @@ def index(request):
     return render(request, "reviews/index.html", context)
 
 
+@login_required
 def create(request):
     if request.method == "POST":
         review_form = ReviewForm(request.POST, request.FILES)
@@ -30,7 +31,7 @@ def create(request):
             review = review_form.save(commit=False)
             review.user = request.user
             review.save()
-            return redirect("reviews:index", review.pk)
+            return redirect("reviews:index")
     else:
         review_form = ReviewForm()
     context = {
@@ -51,6 +52,7 @@ def detail(request, pk):
     return render(request, "reviews/detail.html", context)
 
 
+@login_required
 def delete(request, pk):
     review = get_object_or_404(Review, pk=pk)
     if request.user.is_authenticated:
@@ -60,6 +62,7 @@ def delete(request, pk):
     return redirect("reviews:detail", review.pk)
 
 
+@login_required
 def update(request, pk):
     k = get_object_or_404(Review, pk=pk)
     if request.user == k.user:
@@ -69,7 +72,7 @@ def update(request, pk):
                 review_form.save()
                 return redirect("reviews:index", k.pk)
         else:
-            review_form = ReviewForm(instanc=k)
+            review_form = ReviewForm(instance=k)
         context = {
             "review_form": review_form,
             "k": k,
@@ -77,8 +80,9 @@ def update(request, pk):
         return render(request, "reviews/update.html", context)
 
 
-def comment_create(request, article_pk):
-    article = Review.objects.get(pk=article_pk)
+@login_required
+def comment_create(request, reviews_pk):
+    article = Review.objects.get(pk=reviews_pk)
 
     if request.method == "POST":
         comment_form = CommentForm(request.POST)
@@ -87,12 +91,10 @@ def comment_create(request, article_pk):
             comment.article = article
             comment.user = request.user
             comment.save()
-            messages.success(request, "댓글 추가 완료")
-    else:
-        messages.warning(request, "잘못된 접근입니다.")
     return redirect("reviews:detail", article.pk)
 
 
+@login_required
 def comment_update(request, article_pk, comment_pk):
     article = Review.objects.get(pk=article_pk)
     comment = Comment.objects.get(pk=comment_pk)
@@ -113,14 +115,15 @@ def comment_update(request, article_pk, comment_pk):
     return redirect("reviews:detail", article.pk)
 
 
-def comment_delete(request, article_pk, comment_pk):
+@login_required
+def comment_delete(request, reviews_pk, comment_pk):
     comment = Comment.objects.get(pk=comment_pk)
     if request.user != comment.user:
         messages.warning(request, "권한이 없습니다.")
-        return redirect("reviews:detail", article_pk)
+        return redirect("reviews:detail", reviews_pk)
     if request.method == "POST":
         comment.delete()
         messages.warning(request, "댓글 삭제 완료")
     else:
         messages.warning(request, "잘못된 접근입니다.")
-    return redirect("reviews:detail", article_pk)
+    return redirect("reviews:detail", reviews_pk)
