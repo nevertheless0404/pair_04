@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% load django_bootstrap5 %}
+{% block title %}ACCOUNT_UPDATE{% endblock title %}
+
+{% block content %}
+  <div class="container">
+    <h1>회원정보수정</h1>
+    <form action="{% url 'accounts:update' %}">
+      {% csrf_token %}
+      {% bootstrap_form form %}
+      <a href="{% url 'accounts:change_password'%}">비밀번호 변경</a>
+      <input type="submit">
+    </form>
+  </div>
+{% endblock content %}

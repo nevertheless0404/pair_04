@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% load django_bootstrap5 %}
+{% block title %}ACCOUNT_INDEX{% endblock title %}
+
+{% block content %}
+  {% if request.user.is_authenticated %}
+    <div class="container d-flex">
+      <a href="{% url 'accounts:profile' user.pk %}">{{user}}</a>
+      <form action="{% url 'accounts:logout' %}" method="POST">
+        {% csrf_token %}
+        <input type="submit" value="Logout" class="btn">
+      </form>
+    </div>
+  {% else %}
+    <div class="container">
+      <a href="{% url 'accounts:signup' %}">Signup</a>
+      <a href="{% url 'accounts:login' %}">Login</a>
+    </div>
+  {% endif %}
+{% endblock content %}
