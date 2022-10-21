@@ -97,4 +97,4 @@ def change_password(request):
 def delete(request):
     request.user.delete()
     auth_logout(request)
-    return redirect("accouns:index.html")
+    return render(request, "reviews/index.html")
