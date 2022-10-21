@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% load django_bootstrap5 %}
+{% block title %}DETAIL{% endblock title %}
+
+{% block content %}
+  <p>{{ profile.username }}</p>
+  <p>{{ profile.first_name }}</p>
+  <p>{{ profile.last_name }}</p>
+  <p>{{ profile.email }}</p>
+  <a href="{% url 'accounts:update' %}">수정</a>
+
+{% endblock content %}
