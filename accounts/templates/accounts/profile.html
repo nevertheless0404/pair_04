@@ -8,5 +8,6 @@
   <p>{{ profile.last_name }}</p>
   <p>{{ profile.email }}</p>
   <a href="{% url 'accounts:update' %}">수정</a>
+  <a href="{% url 'accounts:delete' %}">삭제</a>
 
 {% endblock content %}
