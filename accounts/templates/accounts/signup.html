@@ -3,10 +3,12 @@
 {% block title %}ACCOUNT_SIGNUP{% endblock title %}
 
 {% block content %}
-  <h1>회원가입</h1>
-  <form action="{% url 'accounts:signup' %}" method="POST">
-    {% csrf_token %}
-    {% bootstrap_form form %}
-    <input class="btn" type="submit">
-  </form>
+  <div class="container">
+    <h1 class='my-3'>회원가입</h1>
+    <form action="{% url 'accounts:signup' %}" method="POST">
+      {% csrf_token %}
+      {% bootstrap_form form %}
+      <input class="btn btn-outline-warning my-3" type="submit">
+    </form>
+  </div>
 {% endblock content %}
