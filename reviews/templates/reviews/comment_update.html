@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+{% block content %}
+  {% load django_bootstrap5 %}
+  <div class="m-3">
+    <form method="POST">
+      {% csrf_token %}
+      {% bootstrap_form comment_form layout='inline'%}
+      <input type="submit" class="m-2 btn btn-outline-secondary" value="수정">
+    </form>
+  </div>
+{% endblock %}
