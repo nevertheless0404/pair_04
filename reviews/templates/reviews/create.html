@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% block content %}
+  {% load django_bootstrap5 %}
+  {% load static %}
+  <div class="container m-3">
+    <h5 class="my-3 border-bottom pb-2">등록</h5>
+    <form action="" method="POST" enctype="multipart/form-data">
+      {% csrf_token %}
+      {% bootstrap_form review_form %}
+      <input type="submit" class="m-2 btn btn-outline-saecondary" value="등록">
+    </form>
+  {% endblock %}
